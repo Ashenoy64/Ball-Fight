@@ -29,7 +29,7 @@ public class SpawnManger : MonoBehaviour
             Instantiate(prefab, GenerateSpawnPosition(), prefab.transform.rotation);
         }
 
-        SpawnPowerUps(Mathf.CeilToInt(Random.Range(1,3)));
+        SpawnPowerUps(Mathf.CeilToInt(Random.Range(0,3)));
     }
 
     void SpawnPowerUps(int number)
