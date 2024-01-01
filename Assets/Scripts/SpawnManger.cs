@@ -1,6 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SpawnManger : MonoBehaviour
 {
@@ -10,10 +16,10 @@ public class SpawnManger : MonoBehaviour
 
     public int enemyCount = 1;
     private int waveNumber = 1;
+    public TextMeshProUGUI waveCount;
     void Start()
     {
         SpawnEnemyWave(waveNumber);
-        Instantiate(powerups, GenerateSpawnPosition(), powerups.transform.rotation);
     }
 
     void SpawnEnemyWave(int number)
@@ -22,7 +28,18 @@ public class SpawnManger : MonoBehaviour
         {
             Instantiate(prefab, GenerateSpawnPosition(), prefab.transform.rotation);
         }
+
+        SpawnPowerUps(Mathf.CeilToInt(Random.Range(1,3)));
     }
+
+    void SpawnPowerUps(int number)
+    {
+        for (int i = 0; i < number; ++i)
+        {
+            Instantiate(powerups, GenerateSpawnPosition(), powerups.transform.rotation);
+        }
+    }
+
     private Vector3 GenerateSpawnPosition()
     {
         float spawnPosx = Random.Range(-spawnRange, spawnRange);
@@ -36,9 +53,23 @@ public class SpawnManger : MonoBehaviour
         enemyCount = FindObjectsOfType<EnemyController>().Length;
         if(enemyCount == 0 )
         {
-            Instantiate(powerups, GenerateSpawnPosition(), powerups.transform.rotation);
             waveNumber++;
+            waveCount.text = "Wave : " + waveNumber;
             SpawnEnemyWave(waveNumber);
         }
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+#endif
     }
 }

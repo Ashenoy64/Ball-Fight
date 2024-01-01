@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5.0f;
@@ -9,6 +10,9 @@ public class PlayerController : MonoBehaviour
     private GameObject focalPoint;
     private float powerUpStrength=15.0f;
     public bool hasPowerUps = false;
+    public bool isAlive = true;
+
+    public GameObject final;
 
     public GameObject powerUpIndicator;
     void Start()
@@ -53,5 +57,13 @@ public class PlayerController : MonoBehaviour
         playerrb.AddForce(focalPoint.transform.forward * Time.deltaTime * speed * forward);
 
         powerUpIndicator.transform.position = transform.position;
+
+        if(transform.position.y < -10 && isAlive)
+        {
+            Destroy(gameObject);
+            isAlive = false;
+            final.gameObject.SetActive(true);
+            
+        }
     }
 }
